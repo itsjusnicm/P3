@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Primary 3 Long Division Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background: #f0f8ff;
+    }
+    .container {
+        margin-top: 50px;
+    }
+    h1 {
+        color: #2c3e50;
+    }
+    .question {
+        font-size: 28px;
+        margin: 20px;
+    }
+    input {
+        padding: 10px;
+        font-size: 18px;
+        width: 100px;
+        text-align: center;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+    .feedback {
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Long Division Game (P3)</h1>
+    <p>3-digit ÷ 1-digit • 10 Questions</p>
+
+    <div id="game">
+        <div class="question" id="question"></div>
+        <input type="number" id="answer" placeholder="Answer">
+        <br>
+        <button onclick="submitAnswer()">Submit</button>
+        <div class="feedback" id="feedback"></div>
+        <div id="progress"></div>
+    </div>
+
+    <div id="result" style="display:none;">
+        <h2>Game Over!</h2>
+        <p id="score"></p>
+        <button onclick="startGame()">Play Again</button>
+    </div>
+</div>
+
+<script>
+let questionCount = 0;
+let score = 0;
+let dividend, divisor, correctAnswer;
+
+function generateQuestion() {
+    divisor = Math.floor(Math.random() * 8) + 2; // 2–9
+    correctAnswer = Math.floor(Math.random() * 90) + 10; // ensures 3-digit result
+    dividend = divisor * correctAnswer;
+
+    document.getElementById("question").innerText =
+        dividend + " ÷ " + divisor + " = ?";
+    
+    document.getElementById("answer").value = "";
+    document.getElementById("feedback").innerText = "";
+    document.getElementById("progress").innerText =
+        "Question " + (questionCount + 1) + " of 10";
+}
+
+function submitAnswer() {
+    let userAnswer = parseInt(document.getElementById("answer").value);
+
+    if (isNaN(userAnswer)) {
+        document.getElementById("feedback").innerText = "Please enter a number!";
+        return;
+    }
+
+    if (userAnswer === correctAnswer) {
+        score++;
+        document.getElementById("feedback").innerText = "✅ Correct!";
+    } else {
+        document.getElementById("feedback").innerText =
+            "❌ Wrong! Answer: " + correctAnswer;
+    }
+
+    questionCount++;
+
+    setTimeout(() => {
+        if (questionCount < 10) {
+            generateQuestion();
+        } else {
+            endGame();
+        }
+    }, 1000);
+}
+
+function endGame() {
+    document.getElementById("game").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("score").innerText =
+        "Your Score: " + score + " / 10";
+}
+
+function startGame() {
+    questionCount = 0;
+    score = 0;
+    document.getElementById("game").style.display = "block";
+    document.getElementById("result").style.display = "none";
+    generateQuestion();
+}
+
+startGame();
+</script>
+
+</body>
+</html>
